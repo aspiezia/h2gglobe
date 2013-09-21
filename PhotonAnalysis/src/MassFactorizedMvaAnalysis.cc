@@ -547,12 +547,8 @@ bool MassFactorizedMvaAnalysis::AnalyseEvent(LoopAll& l, Int_t jentry, float wei
 	    VHmuevent_prov=MuonTag2012B(l, diphotonVHlep_id, mu_ind, muVtx, VHmuevent_cat, &smeared_pho_energy[0], lep_sync, true, phoidMvaCut, eventweight,  smeared_pho_weight, !isSyst);
 	    int diphotonVH_ele_id=-1;
 	    VHelevent_prov=ElectronTag2012B(l, diphotonVH_ele_id, el_ind, elVtx, VHelevent_cat, &smeared_pho_energy[0], lep_sync, true, phoidMvaCut, eventweight,  smeared_pho_weight, !isSyst);
-	    int vertex = -1;
-	    if(VHmuevent_prov) vertex=muVtx;
-	    if(!VHmuevent_prov && VHelevent_prov){
-		vertex =elVtx;
-		diphotonVHlep_id=diphotonVH_ele_id;
-	    } 
+	    if(!VHmuevent_prov && VHelevent_prov) diphotonVHlep_id=diphotonVH_ele_id;
+            int vertex = l.dipho_vtxind[diphotonVHlep_id];
 	    if(VHmuevent_prov || VHelevent_prov){
 		Njet_lepcat = VHNumberOfJets(l, diphotonVHlep_id, vertex, VHelevent_prov, VHmuevent_prov, el_ind, mu_ind, &smeared_pho_energy[0]);
 		if(Njet_lepcat<3) l.VHNewLeptonCategorization(VHlep1event, VHlep2event, diphotonVHlep_id, vertex, VHelevent_prov, VHmuevent_prov, el_ind, mu_ind, &smeared_pho_energy[0], 45.0);

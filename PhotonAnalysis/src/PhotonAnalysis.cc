@@ -3838,8 +3838,8 @@ bool PhotonAnalysis::MuonTag2012B(LoopAll& l, int& diphotonVHlep_id, int& mu_ind
         }
 
         if(diphotonVHlep_id!=-1){
-            TLorentzVector lead_p4 = l.get_pho_p4( l.dipho_leadind[diphotonVHlep_id], muVtx, &smeared_pho_energy[0]);
-            TLorentzVector sublead_p4 = l.get_pho_p4( l.dipho_subleadind[diphotonVHlep_id], muVtx, &smeared_pho_energy[0]);
+            TLorentzVector lead_p4 = l.get_pho_p4( l.dipho_leadind[diphotonVHlep_id], l.dipho_vtxind[diphotonVHlep_id], &smeared_pho_energy[0]);
+            TLorentzVector sublead_p4 = l.get_pho_p4( l.dipho_subleadind[diphotonVHlep_id], l.dipho_vtxind[diphotonVHlep_id], &smeared_pho_energy[0]);
             TLorentzVector dipho_p4 = lead_p4 + sublead_p4;
             float mass = dipho_p4.M();
             std::string label("noleppho_nomva");
