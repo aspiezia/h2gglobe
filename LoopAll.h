@@ -139,7 +139,9 @@ class LoopAll {
   TTree * outputTreePar;
   TTree * plotvartree;
   TTree * inputfiletree;
-
+  
+  std::vector<TH1*> globalHistos;
+  void AddGlobalHisto(TH1 * x ) { x->SetDirectory(0); globalHistos.push_back(x); }
   TH1D  * pileup;
 
 
@@ -569,7 +571,8 @@ int DiphotonCiCSelection( phoCiCIDLevel LEADCUTLEVEL = phoLOOSE,
                           std::vector<int> cutsbycat=std::vector<int>(0));
 
 
-int DiphotonMITPreSelection(Float_t leadPtMin, Float_t subleadPtMin, Float_t phoidMvaCut, bool applyPtoverM, float *pho_energy_array=0, int fixedvtx=-1, bool split=false, bool kinonly=false, std::vector<bool> veto_indices=std::vector<bool>(false));
+int DiphotonMITPreSelection(Float_t leadPtMin, Float_t subleadPtMin, Float_t phoidMvaCut, bool applyPtoverM, float *pho_energy_array=0, bool vetodipho=false, bool kinonly=false, int fixedvtx=-1, bool split=false, std::vector<bool> veto_indices=std::vector<bool>(false));
+float DiphotonMITPreSelectionPerDipho(int idipho, Float_t leadPtMin, Float_t subleadPtMin, Float_t phoidMvaCut, bool applyPtoverM, float *pho_energy_array=0, int fixedvtx=-1, bool split=false, bool kinonly=false, std::vector<bool> veto_indices=std::vector<bool>(false));
 int DiphotonMITPreSelection2011(Float_t leadPtMin, Float_t subleadPtMin, Float_t phoidMvaCut, bool applyPtoverM, float *pho_energy_array=0, bool kinonly=false);
 
 /** for a photon index, applies all levels of cuts and returns the
@@ -743,6 +746,8 @@ Int_t dipho_leadind[MAX_DIPHOTONS];
 Int_t dipho_subleadind[MAX_DIPHOTONS];
 Int_t dipho_vtxind[MAX_DIPHOTONS];
 Float_t dipho_sumpt[MAX_DIPHOTONS];
+Bool_t dipho_sel[MAX_DIPHOTONS];
+Float_t dipho_BDT[MAX_DIPHOTONS];
 Bool_t pho_genmatched[MAX_PHOTONS];
 Float_t pho_regr_energy_otf[MAX_PHOTONS];
 Float_t pho_regr_energyerr_otf[MAX_PHOTONS];
@@ -902,7 +907,6 @@ std::vector<std::vector<std::vector<UInt_t> > >* pho_passcuts_sublead;
 std::vector<int> * pho_matchingConv;
 TBranch *b_pho_matchingConv;
 
-TBranch *b_rho;
 TBranch *b_gv_n;
 TBranch *b_gv_pos;
 TBranch *b_pu_n;
@@ -1130,7 +1134,6 @@ void SetBranchAddress_pho_ZeeVal_tkiso_badvtx_id(TTree * tree) { tree->SetBranch
 void SetBranchAddress_pho_drtotk_25_99(TTree * tree) { tree->SetBranchAddress("pho_drtotk_25_99", &pho_drtotk_25_99, &b_pho_drtotk_25_99); };
 
 // These are missing in branchdef
-void Branch_rho(TTree * tree) { tree->Branch("rho", &rho, "rho/F"); }; 
 void Branch_gv_pos(TTree * tree) { tree->Branch("gv_pos", "TClonesArray",&gv_pos, 32000, 0); }; 
 void Branch_gv_n(TTree * tree) { tree->Branch("gv_n",&gv_n, "gv_n/I"); }; 
 void Branch_pu_n(TTree * tree) { tree->Branch("pu_n", &pu_n, "pu_n/I"); };
@@ -1162,7 +1165,6 @@ void Branch_pho_cutlevel_sublead(TTree * tree) { tree->Branch("pho_cutlevel_subl
 void Branch_pho_passcuts_sublead(TTree * tree) { tree->Branch("pho_passcuts_sublead", "std::vector<std::vector<std::vector<UInt_t> > >", &pho_passcuts_sublead); };
 
 
-void SetBranchAddress_rho(TTree * tree) { tree->SetBranchAddress("rho", &rho, &b_rho); }; 
 void SetBranchAddress_gv_n(TTree * tree) { tree->SetBranchAddress("gv_n", &gv_n, &b_gv_n); }; 
 void SetBranchAddress_gv_pos(TTree * tree) { tree->SetBranchAddress("gv_pos", &gv_pos, &b_gv_pos); }; 
 void SetBranchAddress_pu_n(TTree * tree) { tree->SetBranchAddress("pu_n", &pu_n, &b_pu_n); };
@@ -1197,8 +1199,6 @@ void doJetMatching(TClonesArray & reco, TClonesArray & gen, Bool_t * match_flag,
 		   Float_t * match_pt, Float_t * match_dr, Float_t maxDr=0.4 );
 
 std::pair<int, int> Select2HighestPtJets(TLorentzVector& leadpho, TLorentzVector& subleadpho, Bool_t * jetid_flags=0);
-
-
 int RescaleJetEnergy(bool force=false);
 
 //Moriond2012
