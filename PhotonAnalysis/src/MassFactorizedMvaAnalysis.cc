@@ -634,8 +634,8 @@ bool MassFactorizedMvaAnalysis::AnalyseEvent(LoopAll& l, Int_t jentry, float wei
 	    float eventweight = weight * genLevWeight;
 	    float myweight=1.;
 	    if(eventweight*sampleweight!=0) myweight=eventweight/sampleweight;
-	    VHLepLegacy(l, diphotonVHlep_id, VHlep1event, VHlep2event, true, mu_ind, muVtx, VHmuevent_cat, el_ind, elVtx, VHelevent_cat, &smeared_pho_energy[0], 
-			phoidMvaCut, eventweight, smeared_pho_weight, isSyst);
+	    VHLepTag2012(l, diphotonVHlep_id, VHlep1event, VHlep2event, true, mu_ind, muVtx, VHmuevent_cat, el_ind, elVtx, VHelevent_cat, &smeared_pho_energy[0], 
+			 phoidMvaCut, eventweight, smeared_pho_weight, isSyst, vetodipho, kinonly);
 	}
 
         if(includeVHmet && !dataIs2011) {
