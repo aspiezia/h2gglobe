@@ -5744,7 +5744,7 @@ double PhotonAnalysis::getCosThetaHX(TLorentzVector g1, TLorentzVector g2){
 
 }
 
-void PhotonAnalysis::VHLepTag2012(LoopAll& l, int & diphotonVHlep_id, bool & VHlep1event, bool & VHlep2event, bool mvaselection, int & mu_ind, int & muVtx, int VHmuevent_cat, int & el_ind, int & elVtx, int VHelevent_cat, float* smeared_pho_energy, float phoidMvaCut, float eventweight, std::vector<float> smeared_pho_weight, bool isSyst, bool vetodipho, bool kinonly){
+void PhotonAnalysis::VHLepTag2013(LoopAll& l, int & diphotonVHlep_id, bool & VHlep1event, bool & VHlep2event, bool mvaselection, int & mu_ind, int & muVtx, int VHmuevent_cat, int & el_ind, int & elVtx, int VHelevent_cat, float* smeared_pho_energy, float phoidMvaCut, float eventweight, std::vector<float> smeared_pho_weight, bool isSyst, bool vetodipho, bool kinonly){
     bool VHmuevent_prov=false;
     bool VHelevent_prov=false;
     if(mvaselection){
