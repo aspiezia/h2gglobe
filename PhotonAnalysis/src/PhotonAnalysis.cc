@@ -5754,25 +5754,20 @@ void PhotonAnalysis::VHLepTag2013(LoopAll& l, int & diphotonVHlep_id, bool & VHl
     bool VHmuevent_prov=false;
     bool VHelevent_prov=false;
     if(mvaselection){
-        VHmuevent_prov=MuonTag2012B(l,diphotonVHlep_id,mu_ind,muVtx,VHmuevent_cat,&smeared_pho_energy[0],lep_sync,mvaselection,
-                                    phoidMvaCut,eventweight,smeared_pho_weight, !isSyst, vetodipho, kinonly);
+        VHmuevent_prov=MuonTag2012B(l,diphotonVHlep_id,mu_ind,muVtx,VHmuevent_cat,&smeared_pho_energy[0],lep_sync,mvaselection,phoidMvaCut,eventweight,smeared_pho_weight, !isSyst, vetodipho, kinonly);
         int diphotonVH_ele_id=-1;
-        VHelevent_prov=ElectronTag2012B(l,diphotonVH_ele_id,el_ind,elVtx,VHelevent_cat,&smeared_pho_energy[0],lep_sync,mvaselection,
-                                        phoidMvaCut,eventweight,smeared_pho_weight, !isSyst, vetodipho, kinonly);
+        VHelevent_prov=ElectronTag2012B(l,diphotonVH_ele_id,el_ind,elVtx,VHelevent_cat,&smeared_pho_energy[0],lep_sync,mvaselection,phoidMvaCut,eventweight,smeared_pho_weight, !isSyst, vetodipho, kinonly);
         if(!VHmuevent_prov && VHelevent_prov) diphotonVHlep_id=diphotonVH_ele_id;
     } else {
-        VHmuevent_prov=MuonTag2012B(l,diphotonVHlep_id,mu_ind,muVtx,VHmuevent_cat,&smeared_pho_energy[0],lep_sync,false,-0.2,
-                                    eventweight,smeared_pho_weight,!isSyst, vetodipho, kinonly);
+        VHmuevent_prov=MuonTag2012B(l,diphotonVHlep_id,mu_ind,muVtx,VHmuevent_cat,&smeared_pho_energy[0],lep_sync,false,-0.2,eventweight,smeared_pho_weight,!isSyst, vetodipho, kinonly);
         int diphotonVH_ele_id=-1;
-        VHelevent_prov=ElectronTag2012B(l,diphotonVH_ele_id,el_ind,elVtx,VHelevent_cat,&smeared_pho_energy[0],lep_sync,false,-0.2,
-                                        eventweight,smeared_pho_weight,!isSyst, vetodipho, kinonly);
+        VHelevent_prov=ElectronTag2012B(l,diphotonVH_ele_id,el_ind,elVtx,VHelevent_cat,&smeared_pho_energy[0],lep_sync,false,-0.2,eventweight,smeared_pho_weight,!isSyst, vetodipho, kinonly);
         if(!VHmuevent_prov && VHelevent_prov) diphotonVHlep_id=diphotonVH_ele_id;
     }
     int vertex = l.dipho_vtxind[diphotonVHlep_id];
     if(VHmuevent_prov || VHelevent_prov){
         int Njet_lepcat = VHNumberOfJets(l, diphotonVHlep_id, vertex, VHelevent_prov, VHmuevent_prov, el_ind, mu_ind, &smeared_pho_energy[0]);
-        if(Njet_lepcat<3) l.VHNewLeptonCategorization(VHlep1event, VHlep2event, diphotonVHlep_id, vertex, VHelevent_prov, VHmuevent_prov, 
-                                                      el_ind, mu_ind, &smeared_pho_energy[0], 45.0);
+        if(Njet_lepcat<3) l.VHNewLeptonCategorization(VHlep1event, VHlep2event, diphotonVHlep_id, vertex, VHelevent_prov, VHmuevent_prov, el_ind, mu_ind, &smeared_pho_energy[0], 45.0);
     }
     l.VHTwoMuonsEvents(VHlep1event, VHlep2event, diphotonVHlep_id, muVtx, &smeared_pho_energy[0], leadEtVHlepCut, subleadEtVHlepCut, applyPtoverM);
     l.VHTwoElectronsEvents(VHlep1event, VHlep2event, diphotonVHlep_id, elVtx, &smeared_pho_energy[0], leadEtVHlepCut, subleadEtVHlepCut, applyPtoverM);
