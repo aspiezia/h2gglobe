@@ -943,8 +943,8 @@ bool StatAnalysis::AnalyseEvent(LoopAll& l, Int_t jentry, float weight, TLorentz
             float eventweight = weight * genLevWeight;
             float myweight=1.;
             if(eventweight*sampleweight!=0) myweight=eventweight/sampleweight;
-	    VHLepTag2013(l, diphotonVHlep_id, VHlep1event, VHlep2event, false, mu_ind, muVtx, VHmuevent_cat, el_ind, elVtx, VHelevent_cat, &smeared_pho_energy[0], phoidMvaCut, eventweight, smeared_pho_weight, isSyst);
-	}
+	          VHLepTag2013(l, diphotonVHlep_id, VHlep1event, VHlep2event, false, mu_ind, muVtx, VHmuevent_cat, el_ind, elVtx, VHelevent_cat, &smeared_pho_energy[0], phoidMvaCut, eventweight, smeared_pho_weight, isSyst);
+	      }
 	
         //Met tag //met at analysis step
         if(includeVHmet){
