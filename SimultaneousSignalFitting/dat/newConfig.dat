@@ -1,4 +1,17 @@
 # proc cat nGausRV nGausWV
+wzh 0 2 1
+wzh 1 3 2
+wzh 2 3 2
+wzh 3 3 2
+wzh 4 1 1
+wzh 5 2 1
+wzh 6 2 1
+wzh 7 3 1
+wzh 8 2 1
+wzh 9 2 1
+wzh 10 3 1
+wzh 11 2 1
+
 ggh 0 2 1
 ggh 1 2 1
 ggh 2 3 2
@@ -8,6 +21,9 @@ ggh 5 2 1
 ggh 6 1 1
 ggh 7 1 1
 ggh 8 1 1
+ggh 9 1 1
+ggh 10 1 1
+ggh 11 1 1
 
 vbf 0 2 1
 vbf 1 2 1
@@ -18,26 +34,9 @@ vbf 5 3 1
 vbf 6 1 1
 vbf 7 1 1
 vbf 8 1 1
-
-wh 0 2 1
-wh 1 3 2
-wh 2 3 2
-wh 3 3 2
-wh 4 1 1
-wh 5 2 1
-wh 6 2 1
-wh 7 3 1
-wh 8 2 1
-
-zh 0 2 1
-zh 1 3 2
-zh 2 3 2
-zh 3 3 1
-zh 4 1 1
-zh 5 2 1
-zh 6 2 1
-zh 7 3 1
-zh 8 2 1
+vbf 9 1 1
+vbf 10 1 1
+vbf 11 1 1
 
 tth 0 3 1
 tth 1 3 1
@@ -48,3 +47,6 @@ tth 5 2 1
 tth 6 3 1
 tth 7 4 1
 tth 8 2 1
+tth 9 3 1
+tth 10 4 1
+tth 11 2 1

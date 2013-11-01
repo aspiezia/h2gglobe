@@ -19,11 +19,14 @@ def makeLabels():
         "Both photons in barrel, min(R_{9}) < 0.94",
         "One or more photons in endcap, min(R_{9}) > 0.94",
         "One or more photons in endcap, min(R_{9}) < 0.94",
-		"Dijet-tagged class BDT_{VBF} >= 0.985",
-		"Dijet-tagged class 0.93 <= BDT_{VBF} < 0.985",
-        "Muon-tagged class",
-        "Electron-tagged class",
-        "MET-tagged class",
+        "Dijet-tagged class BDT_{VBF} >= 0.985",
+        "Dijet-tagged class 0.93 <= BDT_{VBF} < 0.985",
+        "VH leptonic tight class",
+        "VH leptonic loose class",
+        "VH met class",
+        "ttH leptonic class",
+        "ttH hadronic class",
+        "VH hadronic class",
     )
     aDict['baseline7TeV'] = (
         "Both photons in barrel, min(R_{9}) > 0.94",
@@ -145,6 +148,8 @@ def doBandsFit(hmass, cpdf, nomcurve, datanorm, plot, catname, everyN):
         
 def main(o):
     from pprint import pprint
+    
+    ROOT.gSystem.Load("libHiggsAnalysisCombinedLimit.so")
 
     ROOT.gROOT.SetStyle('Plain')
     ROOT.gROOT.SetBatch(1)
@@ -206,7 +211,12 @@ def main(o):
         #data.Print()
 
         #-# The following is anything but Generic
-        bkg = w_bkg.pdf('pdf_data_pol_model_8TeV_cat'+str(cat))
+        if(o.energy=='8TeV'):
+            bkg = w_bkg.pdf('pdf_data_pol_model_8TeV_cat'+str(cat))
+        if(o.energy=='7TeV'):
+            bkg = w_bkg.pdf('pdf_data_pol_model_7TeV_cat'+str(cat))
+        if(o.energy=='7TeVOldWS'):
+            bkg = w_bkg.pdf('pdf_data_pol_model_cat'+str(cat))
         #bkg.Print()
         bkg.fitTo(data)
         r = bkg.fitTo(data, ROOT.RooFit.Save(1) )
@@ -320,7 +330,12 @@ def main(o):
         leg.Draw()
         #cmslatex.DrawLatex(0.2,0.85,'#splitline{CMS Preliminary}{#sqrt{s} = 8 TeV L = %2.1f fb^{-1}}'%lumi)
         #latex.DrawLatex(0.2,0.75,labels[cat])
-        cmslatex.DrawLatex(0.1,0.905,'CMS Preliminary   #sqrt{s} = 8 TeV, L = %2.1f fb^{-1}'%lumi)
+        if(o.energy=='8TeV'):
+            cmslatex.DrawLatex(0.1,0.905,'CMS Preliminary   #sqrt{s} = 8 TeV, L = %2.1f fb^{-1}'%lumi)
+        if(o.energy=='7TeV'):
+            cmslatex.DrawLatex(0.1,0.905,'CMS Preliminary   #sqrt{s} = 7 TeV, L = %2.1f fb^{-1}'%lumi)
+        if(o.energy=='7TeVOldWS'):
+            cmslatex.DrawLatex(0.1,0.905,'CMS Preliminary   #sqrt{s} = 7 TeV, L = %2.1f fb^{-1}'%lumi)
         latex.DrawLatex(0.2,0.82,labels[cat])
 
         canName = o.type+'cat'+str(cat)
@@ -367,6 +382,8 @@ if __name__ == "__main__":
                       help='Set the mH value to use.')
     parser.add_option('-l', '--log', default='INFO', metavar='LEVEL',
                       help='Set the minimum logging level.')
+    parser.add_option('-e', '--energy', type='string', default='8TeV',
+                      help='Energy: 7TeV or 8TeV', metavar='|'.join(types))
     
     (o, args) = parser.parse_args()
 
