@@ -1,0 +1,117 @@
+CMS-HGG_bdt DataCard for Binned Limit Setting with RooDataHist+Parameterised Background
+Run with: combine cms-hgg-datacard.txt -M Routine -D data_mass -m MASS --generateBinnedWorkaround -S 1
+---------------------------------------------
+imax *
+jmax *
+kmax *
+---------------------------------------------
+shapes data_obs *  hgg.inputbkgdata_7TeV.root cms_hgg_workspace:data_mass_$CHANNEL
+shapes bkg_mass *  hgg.inputbkgdata_7TeV.root cms_hgg_workspace:pdf_data_pol_model_$CHANNEL
+
+shapes ggH *  hgg.inputsig_7TeV.root wsig_7TeV:hggpdfrel_$CHANNEL_ggh_7TeV
+shapes qqH *  hgg.inputsig_7TeV.root wsig_7TeV:hggpdfrel_$CHANNEL_vbf_7TeV
+shapes WH  *  hgg.inputsig_7TeV.root wsig_7TeV:hggpdfrel_$CHANNEL_wh_7TeV
+shapes ZH  *  hgg.inputsig_7TeV.root wsig_7TeV:hggpdfrel_$CHANNEL_zh_7TeV
+shapes ttH *  hgg.inputsig_7TeV.root wsig_7TeV:hggpdfrel_$CHANNEL_tth_7TeV
+
+---------------------------------------------
+bin	      cat0 cat1 cat2 cat3 cat4 
+observation   -1   -1   -1   -1   -1   
+---------------------------------------------    
+bin     cat0 cat0 cat0 cat0 cat0 cat0 cat1 cat1 cat1 cat1 cat1 cat1 cat2 cat2 cat2 cat2 cat2 cat2 cat3 cat3 cat3 cat3 cat3 cat3 cat4 cat4 cat4 cat4 cat4 cat4
+process                 ggH         qqH         WH ZH          ttH         bkg_mass ggH         qqH         WH ZH          ttH         bkg_mass ggH         qqH         WH ZH          ttH         bkg_mass ggH         qqH         WH ZH          ttH         bkg_mass ggH         qqH         WH ZH          ttH         bkg_mass 
+process                 0           -1          -2          -3 -4          1        0           -1          -2          -3 -4          1        0           -1          -2          -3 -4          1        0           -1          -2          -3 -4          1        0           -1          -2          -3 -4          1        
+rate     5089.0 5089.0 3256.96 1832.04 5089.0 1.0 5089.0 5089.0 3206.07 1882.93 5089.0 1.0 5089.0 5089.0 3206.07 1882.93 5089.0 1.0 5089.0 5089.0 3307.85 1781.15 5089.0 1.0 5089.0 5089.0 3562.3 1526.7 0.0 1.0
+---------------------------------------------    
+
+jet_tag_migration     lnN     0.99 0.94 0.999 0.999 0.998 - 0.99 0.94 0.999 0.999 0.998 - 0.99 0.94 0.999 0.999 0.998 - 0.99 0.94 0.999 0.999 0.998 - 1.700 1.100 1.100 1.100 1.700 -
+
+lumi_7TeV     lnN     1.022 1.022 1.022 1.022 1.022 - 1.022 1.022 1.022 1.022 1.022 - 1.022 1.022 1.022 1.022 1.022 - 1.022 1.022 1.022 1.022 1.022 - 1.022 1.022 1.022 1.022 1.022 -
+QCDscale_ggH     lnN     0.918/1.125 - - - - - 0.918/1.125 - - - - - 0.918/1.125 - - - - - 0.918/1.125 - - - - - 0.918/1.125 - - - - -
+PDF_gg     lnN     0.923/1.079 - - - 0.915/1.085 - 0.923/1.079 - - - 0.915/1.085 - 0.923/1.079 - - - 0.915/1.085 - 0.923/1.079 - - - 0.915/1.085 - 0.923/1.079 - - - 0.915/1.085 -
+QCDscale_qqH     lnN     - 0.997/1.005 - - - - - 0.997/1.005 - - - - - 0.997/1.005 - - - - - 0.997/1.005 - - - - - 0.997/1.005 - - - -
+PDF_qqbar     lnN     - 0.979/1.027 0.958/1.042 0.958/1.042 - - - 0.979/1.027 0.958/1.042 0.958/1.042 - - - 0.979/1.027 0.958/1.042 0.958/1.042 - - - 0.979/1.027 0.958/1.042 0.958/1.042 - - - 0.979/1.027 0.958/1.042 0.958/1.042 - -
+QCDscale_VH     lnN     - - 0.982/1.018 0.982/1.018 - - - - 0.982/1.018 0.982/1.018 - - - - 0.982/1.018 0.982/1.018 - - - - 0.982/1.018 0.982/1.018 - - - - 0.982/1.018 0.982/1.018 - -
+QCDscale_ttH     lnN     - - - - 0.905/1.036 - - - - - 0.905/1.036 - - - - - 0.905/1.036 - - - - - 0.905/1.036 - - - - - 0.905/1.036 -
+
+# from the non-parametric model datacards
+#     E_res shape 0.333333 0.333333 0.333333 0.333333 0.333333 0 0.333333 0.333333 0.333333 0.333333 0.333333 0 0.333333 0.333333 0.333333 0.333333 0.333333 0 0.333333 0.333333 0.333333 0.333333 0.333333 0 0.333333 0.333333 0.333333 0.333333 0.333333 0
+#     E_scale shape 0.333333 0.333333 0.333333 0.333333 0.333333 0 0.333333 0.333333 0.333333 0.333333 0.333333 0 0.333333 0.333333 0.333333 0.333333 0.333333 0 0.333333 0.333333 0.333333 0.333333 0.333333 0 0.333333 0.333333 0.333333 0.333333 0.333333 0
+#     idEff shape 0.333333 0.333333 0.333333 0.333333 0.333333 0 0.333333 0.333333 0.333333 0.333333 0.333333 0 0.333333 0.333333 0.333333 0.333333 0.333333 0 0.333333 0.333333 0.333333 0.333333 0.333333 0 0.333333 0.333333 0.333333 0.333333 0.333333 0
+#     triggerEff shape 0.333333 0.333333 0.333333 0.333333 0.333333 0 0.333333 0.333333 0.333333 0.333333 0.333333 0 0.333333 0.333333 0.333333 0.333333 0.333333 0 0.333333 0.333333 0.333333 0.333333 0.333333 0 0.333333 0.333333 0.333333 0.333333 0.333333 0
+#     vtxEff shape 0.333333 0.333333 0.333333 0.333333 0.333333 0 0.333333 0.333333 0.333333 0.333333 0.333333 0 0.333333 0.333333 0.333333 0.333333 0.333333 0 0.333333 0.333333 0.333333 0.333333 0.333333 0 0.333333 0.333333 0.333333 0.333333 0.333333 0
+#     kFactor shape 0.333333 0.333333 0.333333 0.333333 0.333333 0 0.333333 0.333333 0.333333 0.333333 0.333333 0 0.333333 0.333333 0.333333 0.333333 0.333333 0 0.333333 0.333333 0.333333 0.333333 0.333333 0 0.333333 0.333333 0.333333 0.333333 0.333333 0
+#----------------------------------------------------------------------    
+# added with respect to non-parametric model
+#----------------------------------------------------------------------    
+
+#----------------------------------------------------------------------    
+#     https://twiki.cern.ch/twiki/bin/viewauth/CMS/HggSystematicUncertainty
+#     has some systematic systematic uncertainties but only 8 TeV TeV (apart from the global
+#     energy scale uncertainty) uncertainty) !
+#----------------------------------------------------------------------    
+
+#     from TWIKI and and 8 TeV datacards (is the the correlated part of the global global
+# energy scale uncertainty, so a common parameter for 7 and 8 TeV)
+CMS_hgg_globalscale param 0.0 0.004717
+
+#----------------------------------------------------------------------    
+#     sent by Chris Chris Palmer (personal mail, 2013-03-08 13:35 13:35 CET)
+#     mass smearing
+CMS_hgg_nuissancedeltasmearcat0_7TeV param 0.0 0.0016
+CMS_hgg_nuissancedeltasmearcat1_7TeV param 0.0 0.0020
+CMS_hgg_nuissancedeltasmearcat2_7TeV param 0.0 0.0032
+CMS_hgg_nuissancedeltasmearcat3_7TeV param 0.0 0.0023
+#CMS_hgg_nuissancedeltasmearcat4      param 0.0 0.0020
+#correlate     with 2012
+CMS_hgg_nuissancedeltasmearcat4 param 0.0 0.001131
+
+#     energy scale
+CMS_hgg_nuissancedeltamcat0_7TeV param 0.0 0.0021
+CMS_hgg_nuissancedeltamcat1_7TeV param 0.0 0.0021
+CMS_hgg_nuissancedeltamcat2_7TeV param 0.0 0.0037
+CMS_hgg_nuissancedeltamcat3_7TeV param 0.0 0.0026
+#CMS_hgg_nuissancedeltamcat4      param 0.0 0.0023
+#correlate     with 2012
+CMS_hgg_nuissancedeltamcat4 param 0.0 0.001474
+
+#----------------------------------------------------------------------    
+# taken from 8TeV CIC parametric cards (no particular justification
+#     why this is is the same at 7 TeV) TeV)
+#----------------------------------------------------------------------    
+#     from Martina (2013-03-10 (2013-03-10 13:24)
+CMS_hgg_nuissancedeltafracright param 1.0 0.005000
+
+#----------------------------------------------------------------------    
+# extracted from the histograms (non-parametric model)
+#     from Jan16_110_150_0_5.root using using UserCode/HiggsAnalysis/HiggsTo2photons/h2gglobe/Macros/makeParametricModelDatacard.C
+#----------------------------------------------------------------------    
+#     cat0 cat1 cat2 cat2 cat3 cat4
+#     ggh vbf wzh wzh tth data ggh vbf wzh wzh tth data ggh vbf wzh wzh tth data ggh vbf wzh wzh tth data ggh vbf wzh wzh tth data
+idEff     lnN     1.004/0.993 1.010/0.976 1.004/0.993 1.004/0.993 1.004/0.992 - 1.015/0.971 1.021/0.954 1.015/0.972 1.015/0.972 1.015/0.971 - 1.013/0.975 1.015/0.970 1.014/0.974 1.014/0.974 1.013/0.976 - 1.034/0.933 1.036/0.928 1.034/0.933 1.034/0.933 1.033/0.934 - 1.041/0.888 1.003/0.999 1.055/0.756 1.055/0.756 0.954/0.911 -
+kFactor     lnN     1.000/1.002 1.000/1.000 1.000/1.000 1.000/1.000 1.000/1.000 - 1.000/0.998 1.000/1.000 1.000/1.000 1.000/1.000 1.000/1.000 - 1.000/1.000 1.000/1.000 1.000/1.000 1.000/1.000 1.000/1.000 - 1.002/0.997 1.000/1.000 1.000/1.000 1.000/1.000 1.000/1.000 - 0.938/1.122 1.000/1.000 1.000/1.000 1.000/1.000 1.000/1.000 -
+r9Eff     lnN     1.080/0.839 1.095/0.803 1.081/0.838 1.081/0.838 1.082/0.836 - 0.925/1.152 0.930/1.136 0.926/1.150 0.926/1.150 0.930/1.142 - 1.113/0.771 1.118/0.760 1.114/0.770 1.114/0.770 1.111/0.776 - 0.898/1.206 0.899/1.204 0.902/1.200 0.902/1.200 0.898/1.208 - 1.058/0.837 0.991/1.025 1.068/0.676 1.068/0.676 0.974/0.733 -
+triggerEff     lnN     1.000/1.000 1.000/1.000 1.000/1.000 1.000/1.000 1.000/1.000 - 1.001/0.998 1.001/0.998 1.001/0.998 1.001/0.998 1.001/0.998 - 1.000/1.000 1.000/1.000 1.000/1.000 1.000/1.000 1.000/1.000 - 1.004/0.992 1.004/0.992 1.004/0.992 1.004/0.992 1.004/0.992 - 1.000/0.998 1.001/0.998 1.001/0.998 1.001/0.998 1.000/0.998 -
+vtxEff     lnN     0.996/1.009 0.994/1.013 0.995/1.010 0.995/1.010 1.001/0.998 - 0.997/1.005 0.995/1.009 0.997/1.006 0.997/1.006 1.001/0.998 - 0.996/1.008 0.994/1.012 0.995/1.011 0.995/1.011 1.001/0.998 - 0.998/1.003 0.997/1.006 0.998/1.005 0.998/1.005 1.001/0.998 - 0.995/1.010 0.987/1.027 1.000/0.999 1.000/0.999 1.001/0.998 -
+
+#----------------------------------------------------------------------    
+# the 8 TeV cutbased parametric model datacards have the following nuisance parameters
+#     (which are not not already used above):
+#----------------------------------------------------------------------    
+
+#     CMS_hgg_eff_trig lnN
+#     CMS_id_eff_eb lnN called called idEff above
+#     CMS_id_eff_ee lnN called called idEff above
+#    
+#    
+#----------------------------------------------------------------------    
+#     not needed for for 7TeV because only one VBF VBF category (and therefore
+#     no migration between between these categories (the migration
+#     to other categories categories is taken care of by by 'jet_tag_migration'
+#----------------------------------------------------------------------    
+#     JEC lnN
+#     UEPS lnN
+#     CMS_eff_j lnN
+#     CMS_hgg_JECmigration lnN
+#     CMS_hgg_UEPSmigration lnN
+
