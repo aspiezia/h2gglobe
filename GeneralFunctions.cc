@@ -1276,10 +1276,8 @@ bool LoopAll::METAnalysis2012B(TLorentzVector lead_p4, TLorentzVector sublead_p4
   // EBEB only
   float leadEta    = lead_p4.Eta();
   float subleadEta = sublead_p4.Eta();
-  //if(moriond2013MetCorrection){
-    if (fabs(leadEta)>1.5)    return tag;
-    if (fabs(subleadEta)>1.5) return tag;
-    //}
+  if (fabs(leadEta)>1.5)    return tag;
+  if (fabs(subleadEta)>1.5) return tag;
 
   if(doMETCleaning){
     bool passcleaning = METCleaning2012B(lead_p4, sublead_p4, myMet);
