@@ -24,6 +24,7 @@ StatAnalysis::StatAnalysis()  :
     doSystematics = true;
     nVBFDijetJetCategories=2;
     scaleClusterShapes = true;
+    scaleR9ForCicOnly = false;
     dumpAscii = false;
     dumpMcAscii = false;
     unblind = false;
@@ -146,11 +147,10 @@ void StatAnalysis::Init(LoopAll& l)
     if( nR9Categories != 0 ) nInclusiveCategories_ *= nR9Categories;
     if( nPtCategories != 0 ) nInclusiveCategories_ *= nPtCategories;
 
-    // mva removed cp march 8
-    //if( useMVA ) nInclusiveCategories_ = nDiphoEventClasses;
-
-    // CP
-
+    // scale R9 for CiC only?
+    if( scaleR9ForCicOnly ) {
+	l.pho_r9_cic = &corrected_pho_r9[0];
+    }
     nPhotonCategories_ = nEtaCategories;
     if( nR9Categories != 0 ) nPhotonCategories_ *= nR9Categories;
 
@@ -709,7 +709,10 @@ bool StatAnalysis::Analysis(LoopAll& l, Int_t jentry)
     // Data driven MC corrections to cluster shape variables and energy resolution estimate
     if (cur_type !=0 && scaleClusterShapes ){
         rescaleClusterVariables(l);
-    }
+    } else { 
+	l.pho_r9_cic = &l.pho_r9[0]; 
+    } 
+    
     if( useDefaultVertex ) {
         for(int id=0; id<l.dipho_n; ++id ) {
             l.dipho_vtxind[id] = 0;
@@ -1011,7 +1014,11 @@ bool StatAnalysis::AnalyseEvent(LoopAll& l, Int_t jentry, float weight, TLorentz
 	}
 
         if(includeTTHlep) {
-	    TTHlepevent = TTHleptonicTag2012(l, diphotonTTHlep_id, &smeared_pho_energy[0]);
+	    if(!l.sqrtS==7){
+		TTHlepevent = TTHleptonicTag2012(l, diphotonTTHlep_id, &smeared_pho_energy[0]);
+	    }else{
+		TTHlepevent = TTHTag7TeV(l, diphotonTTHlep_id,  &smeared_pho_energy[0]);
+	    }
 	}
 
 	// priority of analysis: TTH leptonic, TTH hadronic, lepton tag, vbf,vh met, vhhad btag, vh had 0tag, 
@@ -1373,13 +1380,12 @@ bool StatAnalysis::AnalyseEvent(LoopAll& l, Int_t jentry, float weight, TLorentz
 	//	computeBtagEff(l);
 
 
-	if(includeTTHlep || includeVHhad){
+	if(includeTTHlep || includeTTHhad){
 	    bool isMC = l.itype[l.current]!=0;
 	    if(isMC && applyBtagSF ){
-		if (category==9 ||category ==10){//tth categories
+		if (category==nInclusiveCategories_ + ( (int)includeVBF )*nVBFCategories +  nVHlepCategories +  nVHmetCategories ||
+		    category==nInclusiveCategories_ + ( (int)includeVBF )*nVBFCategories +  nVHlepCategories + nVHmetCategories+nTTHlepCategories){//tth categories
 		    evweight*=BtagReweight(l,shiftBtagEffUp_bc,shiftBtagEffDown_bc,shiftBtagEffUp_l,shiftBtagEffDown_l,1);
-		}else if (category == 11){//vh categories. loose wp for btag
-		    evweight*=BtagReweight(l,shiftBtagEffUp_bc,shiftBtagEffDown_bc,shiftBtagEffUp_l,shiftBtagEffDown_l,0);
 		}
 	    }
 	}
@@ -1712,12 +1718,13 @@ void StatAnalysis::fillControlPlots(const TLorentzVector & lead_p4, const  TLore
             l.FillHist("corrmetPhi",    category+1, corrMetPhi, evweight);
 
             if( mvaVbfSelection ) {
-                if (!multiclassVbfSelection) {
+                if (!multiclassVbfSelection && !combinedmvaVbfSelection) {
                     l.FillHist("vbf_mva",category+1,myVBF_MVA,evweight);
                 } else {
-                    if( vbfVsDiphoVbfSelection ) { 
+                    if( combinedmvaVbfSelection ) { 
                         l.FillHist("vbf_mva0",category+1,myVBF_MVA,evweight);
                         l.FillHist("vbf_mva1",category+1,diphobdt_output,evweight);
+			l.FillHist("vbf_mva2",category+1,myVBFcombined,evweight);
                     } else { 
                         l.FillHist("vbf_mva0",category+1,myVBF_MVA0,evweight);
                         l.FillHist("vbf_mva1",category+1,myVBF_MVA1,evweight);
@@ -1910,7 +1917,7 @@ void StatAnalysis::rescaleClusterVariables(LoopAll &l){
 
             if( scaleR9Only ) {
                 double R9_rescale = (l.pho_isEB[ipho]) ? 1.0048 : 1.00492 ;
-                l.pho_r9[ipho]*=R9_rescale;
+		l.pho_r9[ipho]*=R9_rescale;	   
             } else {
                 l.pho_r9[ipho]*=1.0035;
                 if (l.pho_isEB[ipho]){ l.pho_sieie[ipho] = (0.87*l.pho_sieie[ipho]) + 0.0011 ;}
@@ -1921,13 +1928,20 @@ void StatAnalysis::rescaleClusterVariables(LoopAll &l){
             }
 
         } else {
-            //2012 rescaling from here https://hypernews.cern.ch/HyperNews/CMS/get/higgs2g/752/1/1/2/1/3.html
-
-            if (l.pho_isEB[ipho]) {
-                l.pho_r9[ipho] = 1.0045*l.pho_r9[ipho] + 0.0010;
-            } else {
-                l.pho_r9[ipho] = 1.0086*l.pho_r9[ipho] - 0.0007;
-            }
+	    if( scaleR9ForCicOnly ) { 
+		if (l.pho_isEB[ipho]) {
+		    corrected_pho_r9[ipho] = 1.00793*l.pho_r9[ipho] - 0.00532538;
+		} else {
+		    corrected_pho_r9[ipho] = 1.00017*l.pho_r9[ipho] - 0.0016474;
+		}
+	    } else { 
+		//2012 rescaling from here https://hypernews.cern.ch/HyperNews/CMS/get/higgs2g/752/1/1/2/1/3.html
+		if (l.pho_isEB[ipho]) {
+		    l.pho_r9[ipho] = 1.0045*l.pho_r9[ipho] + 0.0010;
+		} else {
+		    l.pho_r9[ipho] = 1.0086*l.pho_r9[ipho] - 0.0007;
+		}
+	    }
             if( !scaleR9Only ) {
                 if (l.pho_isEB[ipho]) {
                     l.pho_s4ratio[ipho] = 1.01894*l.pho_s4ratio[ipho] - 0.01034;
@@ -2304,7 +2318,7 @@ void StatAnalysis::fillOpTree(LoopAll& l, const TLorentzVector & lead_p4, const 
         
         l.FillTree("dipho_mva", (float)diphobdt_output);
         l.FillTree("dipho_mva_cat", (float)category);
-        if (diphobdt_output>=-0.05) computeExclusiveCategory(l,category,diphoton_index,Higgs.Pt(),diphobdt_output); 
+        if (diphobdt_output>=bdtCategoryBoundaries.back()) computeExclusiveCategory(l,category,diphoton_index,Higgs.Pt(),diphobdt_output); 
     }
 };
 

@@ -38,6 +38,7 @@ class BaseAnalysis;
 #include "VertexAnalysis/interface/PhotonInfo.h"
 #include "VertexAnalysis/interface/VertexAlgoParameters.h"
 #include "Macros/Normalization_8TeV.h"
+#include "RooFuncReader.h"
 
 #define BRANCH_DICT(NAME) branchDict[# NAME] = branch_info_t(& b ## _ ## NAME, & LoopAll::SetBranchAddress ## _ ## NAME, & LoopAll::Branch ## _ ## NAME )
 
@@ -127,6 +128,7 @@ class LoopAll {
   bool runZeeValidation;
   bool applyEcalIsoPresel;
   bool makeDummyTrees;
+  Float_t * pho_r9_cic;
   std::string cicVersion;
   bool usePFCiC;
   
@@ -327,6 +329,7 @@ class LoopAll {
   float pfEcalIso(int phoindex, float dRmax, float dRVetoBarrel, float dRVetoEndcap, float etaStripBarrel, float etaStripEndcap, 
 		  float thrBarrel, float thrEndcaps, int pfToUse=4);
 
+  RooFuncReader *funcReader_dipho_MIT;
   TMVA::Reader *tmvaReaderID_UCSD, * tmvaReader_dipho_UCSD;
   TMVA::Reader *tmvaReaderID_MIT_Barrel, *tmvaReaderID_MIT_Endcap;
   TMVA::Reader *tmvaReader_dipho_MIT;
@@ -625,7 +628,7 @@ Int_t PhotonR9Category(int photonindex, int n_r9cat=3, float r9boundary=0.94) {
   if(photonindex < 0) return -1;
   if(n_r9cat<2)return 0;
   int r9cat=0;
-  float r9 = pho_r9[photonindex];
+  float r9 = pho_r9_cic[photonindex];
   if(n_r9cat==3) {
     r9cat = (Int_t)(r9<0.94) + (r9<0.9);// 0, 1, or 2 (high r9 --> low r9)
   } else if(n_r9cat==2) {
@@ -1196,8 +1199,8 @@ void SetBranchAddress_pho_passcuts_lead(TTree * tree) { tree->SetBranchAddress("
 void SetBranchAddress_pho_cutlevel_sublead(TTree * tree) { tree->SetBranchAddress("pho_cutlevel_sublead", &pho_cutlevel_sublead, &b_pho_cutlevel_sublead ); };
 void SetBranchAddress_pho_passcuts_sublead(TTree * tree) { tree->SetBranchAddress("pho_passcuts_sublead", &pho_passcuts_sublead, &b_pho_passcuts_sublead ); };
 
-void doJetMatching(TClonesArray & reco, TClonesArray & gen, Bool_t * match_flag, Bool_t * match_vbf_flag, Bool_t * match_b_flag, 
-		   Float_t * match_pt, Float_t * match_dr, Float_t maxDr=0.4 );
+void doJetMatching(TClonesArray & reco, TClonesArray & gen, Bool_t * match_flag, Bool_t * match_vbf_flag, Bool_t * match_b_flag, Bool_t * match_c_flag,
+		   Bool_t * match_l_flag, Float_t * match_pt, Float_t * match_dr, Float_t maxDr=0.4 );		 
 
 std::pair<int, int> Select2HighestPtJets(TLorentzVector& leadpho, TLorentzVector& subleadpho, Bool_t * jetid_flags=0);
 int RescaleJetEnergy(bool force=false);

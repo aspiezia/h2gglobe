@@ -327,16 +327,23 @@ class PhotonAnalysis : public BaseAnalysis
     float myEl_ElePho   ;
     float myEl_passelcuts ;
 
-    // Chris' extras
+    // Di-pho MVA
+    bool doDiphoMvaUpFront;
+    bool useGbrDiphotonMva;
+    std::string gbrDiphotonFile;
     std::string bdtTrainingPhilosophy;
     std::string bdtTrainingType;
     std::string photonLevelMvaUCSD  ;
-    std::string eventLevelMvaUCSD   ;
+    std::string eventLevelMvaUCSD   ;                    
     std::string photonLevel2011IDMVA_EB;
     std::string photonLevel2011IDMVA_EE;
     std::string eventLevelMvaMIT    ;
     std::string photonLevel2012IDMVA_EB;
     std::string photonLevel2012IDMVA_EE;
+    std::string photonLevel2013IDMVA_EB;
+    std::string photonLevel2013IDMVA_EE;
+    
+    std::vector<float> bdtCategoryBoundaries;
 
     // n-1 plots for VH hadronic tag 2011
     float  myVHhadLeadJPt;
@@ -360,6 +367,7 @@ class PhotonAnalysis : public BaseAnalysis
     float  myVBFdEta;
     float  myVBFZep;
     float  myVBFdPhi;
+    float  myVBFdPhiTrunc;
     float  myVBF_Mjj;
     float  myVBF_Mgg;
     float  myVBFLeadPhoPtOverM;
@@ -395,6 +403,9 @@ class PhotonAnalysis : public BaseAnalysis
     float myVBFSpin_DeltaPhiJJL;
     float myVBFSpin_absDeltaPhiJJL;
 
+    bool useGbrVbfMva;
+    std::string gbrVbfFile, gbrVbfDiPhoFile;
+    
     bool bookDiPhoCutsInVbf;
     bool mvaVbfSelection, mvaVbfUseDiPhoPt, mvaVbfUsePhoPt;
     bool combinedmvaVbfSelection;
@@ -441,13 +452,15 @@ class PhotonAnalysis : public BaseAnalysis
 
     bool ClassicCatsNm1Plots(LoopAll& l, int diphoton_nm1_id, float* smeared_pho_energy, float eventweight, float myweight);
 
+    RooFuncReader *gbrVbfReader_, *gbrVbfDiphoReader_;
+    
     // Exclusive tags
     TMVA::Reader *tmvaVbfDiphoReader_;
 
     int  categoryFromBoundaries(std::vector<float> & v, float val);
     int  categoryFromBoundaries2D(std::vector<float> & v1, std::vector<float> & v2, std::vector<float> & v3, float val1, float val2, float val3);
     
-    bool VBFTag2013(int & ijet1, int & ijet2, LoopAll& l, int& diphotonVBF_id, float* smeared_pho_energy=0, bool vetodipho=true, bool kinonly=true, bool mvaselection=true);
+    bool VBFTag2013(int & ijet1, int & ijet2, LoopAll& l, int& diphotonVBF_id, float* smeared_pho_energy=0, bool vetodipho=true, bool kinonly=true, bool mvaselection=true, float eventweight=1, float myweight=1);
     bool FillDijetVariables(int & ijet1, int & ijet2, LoopAll& l, int diphoton_id, float* smeared_pho_energy=0,bool* jetid_flag=0, bool getAngles=0);
     // ICHEP2012
     bool VBFTag2012(int & ijet1, int & ijet2, LoopAll& l, int diphoton_id,
@@ -465,9 +478,12 @@ class PhotonAnalysis : public BaseAnalysis
     bool TTHleptonicTag2012(LoopAll& l, int& diphoton_id, float* smeared_pho_energy=0, bool *jetid_flags=0,bool mvaselection=false,bool vetodipho=false, bool kinonly=false);
     //TTH hadronic category
     bool TTHhadronicTag2012(LoopAll& l, int& diphoton_id, float* smeared_pho_energy=0, bool *jetid_flags=0, bool mvaselection=false,bool vetodipho=false, bool kinonly=false);
+    //only one tth category for 7 TeV
+    bool TTHTag7TeV(LoopAll& l, int& diphoton_id, float* smeared_pho_energy=0, bool *jetid_flags=0,bool mvaselection=false,bool vetodipho=false, bool kinonly=false);
 
     //btag syst
     float BtagReweight(LoopAll& l, bool shiftBtagEffUp_bc, bool shiftBtagEffDown_bc, bool shiftBtagEffUp_l, bool shiftBtagEffDown_l,int WP);
+    float BtagReweight2013(LoopAll& l, bool shiftBtagEffUp_bc, bool shiftBtagEffDown_bc, bool shiftBtagEffUp_l, bool shiftBtagEffDown_l,int WP);
 
     //electrons-muons SF
     float ElectronSFReweight(LoopAll& l);

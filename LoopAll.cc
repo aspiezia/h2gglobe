@@ -429,6 +429,7 @@ LoopAll::LoopAll(TTree *tree) :
   rooContainer->BlindData();	// 2012 requires that we Blind our data
   // Best Set Global parameters accesible via python to defauls
   
+  funcReader_dipho_MIT = 0;
   /// signalNormalizer->FillSignalTypes();
 
   runZeeValidation = false;
@@ -437,6 +438,7 @@ LoopAll::LoopAll(TTree *tree) :
   applyEcalIsoPresel = false;
   pfisoOffset=2.5;
   cicVersion="7TeV";
+  pho_r9_cic = &pho_r9[0];
 }
 
 // ------------------------------------------------------------------------------------
